@@ -25,7 +25,8 @@ setup(
     python_requires=">=3.6",
     entry_points={
         'console_scripts': [
-            'zsh-analytics=src.cli:main',
+            'shellstat=src.cli:main',
         ],
-    }
+    },
+    keywords='shell analytics',
 )
