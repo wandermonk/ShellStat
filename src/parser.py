@@ -2,20 +2,27 @@ import datetime
 import re
 
 def parse_commands(lines):
+    if len(lines) == 0:
+        return []
     commands = [line.split(';')[1].strip() if ';' in line else '' for line in lines]
     return commands
 
 def parse_commands_with_time(lines):
+    if len(lines) == 0:
+        return []
     commands_with_time = []
     for line in lines:
         parts = line.split(";")
         if len(parts) > 1:
             timestamp_parts = parts[0].strip().split(':')
+            print("timestamp_parts: "+str(timestamp_parts)+"\n")
             if len(timestamp_parts) > 1:
                 timestamp = timestamp_parts[1]  # This assumes the timestamp is the second part
                 command = parts[1].strip()
                 timestamp = datetime.datetime.fromtimestamp(int(timestamp))
                 commands_with_time.append((timestamp, command))
+            else:
+                commands_with_time.append((datetime.datetime.fromtimestamp(int(timestamp_parts[0])), parts[1].strip()))
     return commands_with_time
 
 def command_length_and_complexity(commands):
@@ -28,6 +35,8 @@ def command_length_and_complexity(commands):
             'redirections': command.count('>') + command.count('<')
         }
         analysis.append((command, length, complexity))
+        print("analysis after appending: "+"\n")
+        print(str(analysis)+"\n")
     return analysis
 
 def identify_security_risks(commands):
