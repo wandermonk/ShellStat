@@ -4,6 +4,9 @@ from collections import defaultdict
 def analyze_commands(commands):
     return Counter(commands)
 
+def analyze_security_risks(risks):
+    return Counter(risks)
+
 def analyze_commands_by_hour(commands_with_time):
     hourly_commands = {}
     for timestamp, command in commands_with_time:

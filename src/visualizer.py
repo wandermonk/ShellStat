@@ -36,3 +36,14 @@ def visualize_length_and_complexity(analysis, filename='length_and_complexity.pn
     plt.ylabel('Command Length')
     plt.title('Command Length vs Complexity')
     plt.savefig(path)
+
+def visualize_security_risks(risk_counts, filename='security_risks.png'):
+    if not os.path.exists(static_folder):
+        os.makedirs(static_folder)
+    labels, values = zip(*risk_counts.items())
+    plt.barh(labels, values)
+    path = os.path.join(static_folder, filename)
+    plt.xlabel('Count')
+    plt.ylabel('Risky Command')
+    plt.title('Identified Security Risks')
+    plt.savefig(path)
