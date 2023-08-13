@@ -2,6 +2,8 @@
 
 ShellStat is an analytics tool designed to provide insights into shell history, offering a unique perspective on user behaviour, trends, and efficiency within the terminal environment.
 
+![image](https://github.com/wandermonk/ShellStat/assets/6492271/55bb5361-5b4e-448f-be43-79f61cd23cbb)
+
 ## Features
 
 - **Command Analysis**: Break down command usage by frequency, user, and more.
