@@ -1,4 +1,4 @@
-from file_reader import read_lines
+from file_reader import read_history_file as read_lines
 from parser import parse_commands_with_time, parse_commands, command_length_and_complexity, identify_security_risks
 from analyzer import analyze_commands, analyze_commands_by_hour, analyze_length_and_complexity, analyze_security_risks
 from visualizer import create_bar_chart, create_commands_by_hour, visualize_length_and_complexity, visualize_security_risks
