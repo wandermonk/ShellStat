@@ -16,3 +16,15 @@ def parse_commands_with_time(lines):
                 timestamp = datetime.datetime.fromtimestamp(int(timestamp))
                 commands_with_time.append((timestamp, command))
     return commands_with_time
+
+def command_length_and_complexity(commands):
+    analysis = []
+    for command in commands:
+        length = len(command)
+        complexity = {
+            'arguments': command.count(' '),
+            'pipes': command.count('|'),
+            'redirections': command.count('>') + command.count('<')
+        }
+        analysis.append((command, length, complexity))
+    return analysis
