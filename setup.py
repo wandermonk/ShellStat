@@ -16,7 +16,14 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/wandermonk/shellstat",
     packages=find_packages(),
-    install_requires=requirements,
+    install_requires=[
+        'Flask'>=2.3.2,
+        'matplotlib'>=3.7.2,
+        'numpy'>=1.25.2,
+        'pandas'>=2.0.3,
+        'scikit-learn'>=1.3.0,
+        'scipy'>=1.11.1,
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
