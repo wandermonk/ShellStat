@@ -1,9 +1,6 @@
 # ShellStat
 
-ShellStat is an analytics tool designed to provide insights into shell history, offering a unique perspective on user behavior, trends, and efficiency within the terminal environment.
-
-![ShellStat Demo Image](path_to_demo_image.png) 
-<!-- Replace 'path_to_demo_image.png' with a real path if you have a demo image or screenshot of your project -->
+ShellStat is an analytics tool designed to provide insights into shell history, offering a unique perspective on user behaviour, trends, and efficiency within the terminal environment.
 
 ## Features
 
@@ -14,38 +11,42 @@ ShellStat is an analytics tool designed to provide insights into shell history, 
 
 ## Installation
 
-```bash
-pip install shellstat
+`pip install shellstat`
 
-For more detailed installation steps and requirements, see the Installation Guide.
+Please have a look at the Installation Guide for more detailed installation steps and requirements.
 
 ## Usage
 Once installed, you can use ShellStat with:
 
-shellstat [options]
+`shellstat [options]`
 
-For more detailed usage instructions and examples, visit the User Guide.
+You can visit the User Guide if you would like more detailed usage instructions and examples.
 
-Contributing
+## Contributing
 
 Contributions are welcome! If you'd like to contribute, please review our Contributing Guidelines.
 
-Fork the project
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
-Open a pull request
-License
+
+> Fork the project
+> Create your feature branch (git checkout -b feature/AmazingFeature)
+> Commit your changes (git commit -m 'Add some AmazingFeature')
+> Push to the branch (git push origin feature/AmazingFeature)
+> Open a pull request
+
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Acknowledgements
-List of libraries or tools you used
-Inspiration for this project
-Any collaborators or acknowledgments
-Contact
-For any questions or feedback, please open an issue on our GitHub repository or send us an email at support@example.com.
+## Acknowledgements
+List of libraries or tools used
+Flask, Pandas, Matplotlib
 
-Proudly built with ❤️ by Your Name
+Inspiration for this project
+I'd like to build some analytics on how I am using my command line.
+
+Contact
+For any questions or feedback, please open an issue on our GitHub repository or email me at phanikumaryadavilli@gmail.com.
+
+Proudly built with ❤️ by Phani Kumar Yadavilli
 
 License Content
 MIT License
@@ -62,7 +63,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED "AS IS"WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
