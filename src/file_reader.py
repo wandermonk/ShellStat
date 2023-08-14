@@ -1,7 +1,8 @@
 import os
 
+
 def get_history_file_path():
-    if os.name == 'nt': 
+    if os.name == 'nt':
         return os.path.join(os.environ['APPDATA'], 'Microsoft/Windows/PowerShell/PSReadline/ConsoleHost_history.txt')
     elif os.environ['SHELL'].endswith('zsh'):
         return os.path.expanduser("~/.zsh_history")
@@ -16,7 +17,7 @@ def read_history_file():
     try:
         with open(history_file_path, "rb") as file:
             lines = file.read()
-            lines = lines.decode("ISO-8859-1").split("\n") # Adjust encoding as needed
+            lines = lines.decode("ISO-8859-1").split("\n")  # Adjust encoding as needed
             return lines
     except FileNotFoundError:
         print(f"History file not found at {history_file_path}")
