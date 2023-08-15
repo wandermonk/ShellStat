@@ -45,6 +45,7 @@ threadpoolctl==3.2.0
 twine==4.0.2
 tzdata==2023.3
 urllib3==2.0.4
+watchdog==3.0.0
 webencodings==0.5.1
 Werkzeug==2.3.6
 zipp==3.16.2

@@ -1,4 +1,4 @@
-#!/Users/phanikumaryadavilli/shellstat/shellstat/bin/python3.11
+#!/Users/phanikumaryadavilli/ShellStat/shellstat/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

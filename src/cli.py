@@ -1,25 +1,69 @@
-from file_reader import read_history_file as read_lines
-from parser import parse_commands_with_time, parse_commands, command_length_and_complexity, identify_security_risks
-from analyzer import analyze_commands, analyze_commands_by_hour, analyze_length_and_complexity, analyze_security_risks
-from visualizer import create_bar_chart, create_commands_by_hour, visualize_length_and_complexity, visualize_security_risks
-from webserver import run_server
+import os
+import time
+from watchdog.observers import Observer
+from file_reader import FileChangeHandler
+from webserver import app
 
-lines = read_lines()
-commands = parse_commands(lines)
-commands_with_time = parse_commands_with_time(lines)
+from threading import Thread
+from file_reader import get_or_create_snapshot_file, get_last_committed_offset, get_history_file_path, get_or_create_metrics_file
+from hparser import CommandParser, CommandWithTimeParser, CommandLengthAndComplexityParser, CommandRiskParser
+from hanalyzer import CommandAnalyzer, CommandsByHourAnalyzer, ComplexityAnalyzer, CommandLengthAnalyzer, SecurityRiskAnalyzer
 
-frequencies = analyze_commands(commands)
-hourly_commands = analyze_commands_by_hour(commands_with_time)
-command_length = command_length_and_complexity(commands)
-risks = identify_security_risks(commands)
+from db import RocksDBConnection
 
-top_commands = frequencies.most_common(10)
-length_and_complexity = analyze_length_and_complexity(command_length)
-risk_counts = analyze_security_risks(risks)
+def watch_history(history_file_path, offset, metrics_file):
+    # initialize parsers
+    command_parser = CommandParser()
+    risk_parser = CommandRiskParser()
+    command_with_time_parser = CommandWithTimeParser()
+    command_length_and_complexity_parser = CommandLengthAndComplexityParser()
+    # initialize analyzers
+    command_analyzer = CommandAnalyzer()
+    commands_by_hour_analyzer = CommandsByHourAnalyzer()
+    complexity_analyzer = ComplexityAnalyzer()
+    command_length_analyzer = CommandLengthAnalyzer()
+    risk_analyzer = SecurityRiskAnalyzer()  
+    handler = FileChangeHandler(
+        history_file_path, 
+        offset, 
+        RocksDBConnection.__new__(RocksDBConnection, metrics_file).db,
+        parsers=[command_parser, command_with_time_parser, command_length_and_complexity_parser, risk_parser],
+        analyzers=[command_analyzer, commands_by_hour_analyzer, complexity_analyzer, command_length_analyzer, risk_analyzer],
+        )
+    observer = Observer()
+    observer.schedule(handler, os.path.dirname(history_file_path), recursive=False)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+        observer.join()
+    return handler.offset
 
-create_bar_chart(top_commands)
-create_commands_by_hour(hourly_commands)
-visualize_length_and_complexity(length_and_complexity)
-visualize_security_risks(risk_counts)
 
-run_server()
+
+def run_server():
+    app.run(debug=True, use_reloader=False, port=5000)
+
+
+def main():
+    server_thread = Thread(target=run_server)
+    server_thread.start()
+
+    snapshot_file_path = get_or_create_snapshot_file(os.path.dirname(get_history_file_path()), os.path.join(os.path.dirname(get_history_file_path()), '.history_snapshot'))
+    last_committed_offset = get_last_committed_offset(snapshot_file_path)
+    history_file = get_history_file_path()
+    metrics_file = get_or_create_metrics_file(history_file)
+
+    print(f"Reading history file: {history_file} from offset: {last_committed_offset} \n")
+    try:
+        offset = watch_history(history_file, last_committed_offset, metrics_file)
+    except KeyboardInterrupt:
+        offset = last_committed_offset
+    print(f"Writing offset: {offset} to snapshot file: {snapshot_file_path}")
+    with open(snapshot_file_path, 'w') as snapshot_file:
+        snapshot_file.write(str(offset))
+
+if __name__ == "__main__":
+    main()
