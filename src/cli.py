@@ -23,6 +23,7 @@ def watch_history(history_file_path, offset, metrics_file):
     complexity_analyzer = ComplexityAnalyzer()
     command_length_analyzer = CommandLengthAnalyzer()
     risk_analyzer = SecurityRiskAnalyzer()  
+
     handler = FileChangeHandler(
         history_file_path, 
         offset, 
@@ -64,6 +65,9 @@ def main():
     print(f"Writing offset: {offset} to snapshot file: {snapshot_file_path}")
     with open(snapshot_file_path, 'w') as snapshot_file:
         snapshot_file.write(str(offset))
+    server_thread.join()
+    RocksDBConnection.db.close()
+    
 
 if __name__ == "__main__":
     main()

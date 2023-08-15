@@ -1,5 +1,5 @@
 from flask import Flask, render_template_string, url_for
-from rocksdict import Rdict
+from db import RocksDBConnection
 import os
 
 from file_reader import get_history_file_path, get_or_create_metrics_file
@@ -14,9 +14,7 @@ def index():
 
 @app.route('/metrics')
 def metrics():
-    history_file = get_history_file_path()
-    metrics_file = get_or_create_metrics_file(history_file)
-    db = Rdict(metrics_file)
+    _db = RocksDBConnection._instance.db
     return render_template_string("""
     <html>
         <head>
@@ -37,9 +35,9 @@ def metrics():
         </body>
     </html>
     """, 
-    total_commands=db.get('total_commands', 0),
-    commands_by_hour=db.get('commands_by_hour', {}),
-    complexity=db.get('complexity', {}),
-    command_length=db.get('command_length', {}),
-    security_risk=db.get('security_risk', {})
+    total_commands=_db.get('total_commands', "N/A"),
+    commands_by_hour=_db.get('commands_by_hour', "N/A"),
+    complexity=_db.get('complexity', "N/A"),
+    command_length=_db.get('command_length', "N/A"),
+    security_risk=_db.get('security_risk', "N/A")
     )
