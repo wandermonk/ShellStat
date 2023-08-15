@@ -1,6 +1,7 @@
 import os
 from watchdog.events import FileSystemEventHandler
 from hanalyzer import CommandAnalyzer, CommandsByHourAnalyzer, ComplexityAnalyzer, CommandLengthAnalyzer, SecurityRiskAnalyzer
+from hvisualizer import BarChartVisualizer, CommandsByHourVisualizer, LengthAndComplexityVisualizer, SecurityRiskVisualizer
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, filepath, offset, db, parsers=[], analyzers=[]):
@@ -24,14 +25,19 @@ class FileChangeHandler(FileSystemEventHandler):
                 for data, analyzer in zip(parsed_data_list, self.analyzers):
                     if isinstance(analyzer, CommandAnalyzer):
                         self.store_metrics('total_commands', analyzer.analyze(data))
+                        BarChartVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, CommandsByHourAnalyzer):
                         self.store_metrics('commands_by_hour', analyzer.analyze(data))
+                        CommandsByHourVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, ComplexityAnalyzer):
                         self.store_metrics('complexity', analyzer.analyze(data))
+                        LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, CommandLengthAnalyzer):
                         self.store_metrics('command_length', analyzer.analyze(data))
+                        LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, SecurityRiskAnalyzer):
                         self.store_metrics('security_risk', analyzer.analyze(data))
+                        SecurityRiskVisualizer().visualize(analyzer.analyze(data))
                     else:
                         raise Exception("Unknown analyzer type")
                 # Process the decoded lines for generating insights.
