@@ -27,7 +27,6 @@ def watch_history(history_file_path, offset, metrics_file):
     handler = FileChangeHandler(
         history_file_path, 
         offset, 
-        RocksDBConnection.__new__(RocksDBConnection, metrics_file).db,
         parsers=[command_parser, command_with_time_parser, command_length_and_complexity_parser, risk_parser],
         analyzers=[command_analyzer, commands_by_hour_analyzer, complexity_analyzer, command_length_analyzer, risk_analyzer],
         )

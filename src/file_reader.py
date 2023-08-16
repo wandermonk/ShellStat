@@ -8,7 +8,6 @@ class FileChangeHandler(FileSystemEventHandler):
         self.filepath = filepath
         self.offset = offset
         self.parsers = parsers
-        self.db = db
         self.analyzers = analyzers
 
     def on_modified(self, event):
@@ -24,27 +23,19 @@ class FileChangeHandler(FileSystemEventHandler):
 
                 for data, analyzer in zip(parsed_data_list, self.analyzers):
                     if isinstance(analyzer, CommandAnalyzer):
-                        self.store_metrics('total_commands', analyzer.analyze(data))
                         BarChartVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, CommandsByHourAnalyzer):
-                        self.store_metrics('commands_by_hour', analyzer.analyze(data))
                         CommandsByHourVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, ComplexityAnalyzer):
-                        self.store_metrics('complexity', analyzer.analyze(data))
                         LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, CommandLengthAnalyzer):
-                        self.store_metrics('command_length', analyzer.analyze(data))
                         LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
                     elif isinstance(analyzer, SecurityRiskAnalyzer):
-                        self.store_metrics('security_risk', analyzer.analyze(data))
                         SecurityRiskVisualizer().visualize(analyzer.analyze(data))
                     else:
                         raise Exception("Unknown analyzer type")
                 # Process the decoded lines for generating insights.
                 self.offset = file.tell() # Update the offset
-    
-    def store_metrics(self, key, value):
-        self.db[key] = value
 
 # TODO: Make this configurable
 def get_or_create_snapshot_file(base_dir, snapshot_file_path):
