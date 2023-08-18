@@ -7,6 +7,7 @@ class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, filepath, offset, db, parsers=[], analyzers=[]):
         self.filepath = filepath
         self.offset = offset
+        self.db = db
         self.parsers = parsers
         self.analyzers = analyzers
 
@@ -23,15 +24,25 @@ class FileChangeHandler(FileSystemEventHandler):
 
                 for data, analyzer in zip(parsed_data_list, self.analyzers):
                     if isinstance(analyzer, CommandAnalyzer):
-                        BarChartVisualizer().visualize(analyzer.analyze(data))
+                        result = analyzer.analyze(data)
+                        BarChartVisualizer().visualize(result)
+                        self.db.insert_metric('command_count', len(result))
                     elif isinstance(analyzer, CommandsByHourAnalyzer):
-                        CommandsByHourVisualizer().visualize(analyzer.analyze(data))
+                        result = analyzer.analyze(data)
+                        CommandsByHourVisualizer().visualize(result)
+                        self.db.insert_metric('commands_by_hour', len(result))
                     elif isinstance(analyzer, ComplexityAnalyzer):
+                        result = analyzer.analyze(data)
                         LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
+                        self.db.insert_metric('complexity', len(result))
                     elif isinstance(analyzer, CommandLengthAnalyzer):
+                        result = analyzer.analyze(data)
                         LengthAndComplexityVisualizer().visualize(analyzer.analyze(data))
+                        self.db.insert_metric('command_length', len(result))
                     elif isinstance(analyzer, SecurityRiskAnalyzer):
+                        result = analyzer.analyze(data)
                         SecurityRiskVisualizer().visualize(analyzer.analyze(data))
+                        self.db.insert_metric('security_risk', len(result))
                     else:
                         raise Exception("Unknown analyzer type")
                 # Process the decoded lines for generating insights.
